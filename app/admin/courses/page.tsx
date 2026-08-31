@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
-import { nesaCoursesList } from "@/components/layout/Navbar";
+import { useState, useEffect } from "react";
+import { getStoredCourses, saveStoredCourses, Course } from "@/lib/courses";
 
 export default function AdminCoursesPage() {
-  const [courses, setCourses] = useState(nesaCoursesList);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
@@ -16,23 +16,41 @@ export default function AdminCoursesPage() {
     lessons: 12,
     students: 100,
     desc: "",
+    category: "Spoken English",
+    duration: "2 Months",
   });
 
+  useEffect(() => {
+    setCourses(getStoredCourses());
+  }, []);
+
   const handleOpenAdd = () => {
-    setForm({ name: "", slug: "", badge: "POPULAR", price: "₹4,999", lessons: 12, students: 100, desc: "" });
+    setForm({
+      name: "",
+      slug: "",
+      badge: "NEW",
+      price: "₹4,999",
+      lessons: 12,
+      students: 0,
+      desc: "",
+      category: "Spoken English",
+      duration: "2 Months",
+    });
     setEditingSlug(null);
     setShowModal(true);
   };
 
-  const handleOpenEdit = (course: typeof nesaCoursesList[0]) => {
+  const handleOpenEdit = (course: Course) => {
     setForm({
       name: course.name,
       slug: course.slug,
-      badge: course.badge,
+      badge: course.badge || "POPULAR",
       price: course.price,
-      lessons: course.lessons,
-      students: course.students,
-      desc: course.desc,
+      lessons: course.lessons || 12,
+      students: course.students || 0,
+      desc: course.desc || "",
+      category: course.category || "Spoken English",
+      duration: course.duration || "2 Months",
     });
     setEditingSlug(course.slug);
     setShowModal(true);
@@ -41,30 +59,38 @@ export default function AdminCoursesPage() {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     const newSlug = form.slug || form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+    const updatedCourse: Course = { ...form, slug: newSlug };
 
+    let updatedList: Course[];
     if (editingSlug) {
-      setCourses(courses.map((c) => (c.slug === editingSlug ? { ...form, slug: newSlug } : c)));
+      updatedList = courses.map((c) => (c.slug === editingSlug ? updatedCourse : c));
     } else {
-      setCourses([{ ...form, slug: newSlug }, ...courses]);
+      updatedList = [updatedCourse, ...courses];
     }
+    setCourses(updatedList);
+    saveStoredCourses(updatedList);
     setShowModal(false);
   };
 
   const handleDelete = (slug: string) => {
     if (confirm("Are you sure you want to delete this course?")) {
-      setCourses(courses.filter((c) => c.slug !== slug));
+      const updatedList = courses.filter((c) => c.slug !== slug);
+      setCourses(updatedList);
+      saveStoredCourses(updatedList);
     }
   };
 
-  const filtered = courses.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()) || c.badge.toLowerCase().includes(search.toLowerCase()));
+  const filtered = courses.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase()) ||
+    c.badge.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div>
-      {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", marginBottom: "28px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "28px", flexWrap: "wrap", gap: "16px" }}>
         <div>
           <h1 style={{ fontSize: "28px", fontWeight: "900", color: "#0f172a" }}>
-            NESA Course Management
+            Course Management 📚
           </h1>
           <p style={{ fontSize: "14px", color: "#64748b" }}>
             Add, update, or remove spoken English and IELTS course offerings ({courses.length} total courses)
@@ -82,11 +108,11 @@ export default function AdminCoursesPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search course by title or badge..."
-          style={{ width: "100%", maxWidth: "400px", padding: "12px", border: "1px solid #cbd5e1", borderRadius: "8px", fontSize: "14px", outline: "none" }}
+          style={{ width: "100%", maxWidth: "400px", padding: "12px 16px", border: "1px solid #cbd5e1", borderRadius: "10px", fontSize: "14px", outline: "none", background: "#ffffff" }}
         />
       </div>
 
-      {/* Courses Table */}
+      {/* Courses Table / Cards Container */}
       <div className="card-nesa" style={{ overflow: "hidden", padding: 0 }}>
         <div className="data-table-container">
           <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: "700px" }}>
@@ -146,34 +172,34 @@ export default function AdminCoursesPage() {
             <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div>
                 <label style={{ fontSize: "12px", fontWeight: "700", color: "#475569", display: "block", marginBottom: "4px" }}>Course Title *</label>
-                <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. NESA Fluent English Level 1" style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
+                <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. NESA Fluent English Level 1" style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
               </div>
 
-              <div className="responsive-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#475569", display: "block", marginBottom: "4px" }}>Badge Tag</label>
-                  <input value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })} placeholder="POPULAR / PRO" style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
+                  <input value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })} placeholder="POPULAR / PRO" style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
                 </div>
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#475569", display: "block", marginBottom: "4px" }}>Course Fee *</label>
-                  <input required value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="₹4,999" style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
+                  <input required value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="₹4,999" style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
                 </div>
               </div>
 
-              <div className="responsive-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#475569", display: "block", marginBottom: "4px" }}>Lessons Count</label>
-                  <input type="number" value={form.lessons} onChange={(e) => setForm({ ...form, lessons: Number(e.target.value) })} style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
+                  <input type="number" value={form.lessons} onChange={(e) => setForm({ ...form, lessons: Number(e.target.value) })} style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
                 </div>
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "700", color: "#475569", display: "block", marginBottom: "4px" }}>Enrolled Students</label>
-                  <input type="number" value={form.students} onChange={(e) => setForm({ ...form, students: Number(e.target.value) })} style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
+                  <input type="number" value={form.students} onChange={(e) => setForm({ ...form, students: Number(e.target.value) })} style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
                 </div>
               </div>
 
               <div>
                 <label style={{ fontSize: "12px", fontWeight: "700", color: "#475569", display: "block", marginBottom: "4px" }}>Description *</label>
-                <textarea rows={3} required value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="Short overview of course learning outcomes..." style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
+                <textarea rows={3} required value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="Short overview of course learning outcomes..." style={{ width: "100%", padding: "10px 14px", borderRadius: "8px", border: "1px solid #cbd5e1", fontSize: "14px" }} />
               </div>
 
               <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "12px" }}>
