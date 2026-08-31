@@ -88,6 +88,7 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   box-shadow: 0 4px 16px rgba(14, 77, 146, 0.25);
   white-space: nowrap;
+  max-width: 100%;
 }
 
 .btn-primary:hover {
@@ -113,6 +114,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-body);
   text-decoration: none;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 .btn-secondary:hover {
@@ -138,6 +140,18 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.responsive-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .responsive-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .responsive-grid-3 {
@@ -173,5 +187,16 @@ h1, h2, h3, h4, h5, h6 {
 @media (min-width: 1024px) {
   .responsive-grid-4 {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile Adjustments (< 640px) */
+@media (max-width: 640px) {
+  .btn-primary, .btn-secondary {
+    padding: 12px 20px !important;
+    font-size: 13px !important;
+  }
+  .card-nesa {
+    padding: 20px !important;
   }
 }
