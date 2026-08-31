@@ -44,114 +44,80 @@ export default function Navbar() {
           left: 0,
           right: 0,
           zIndex: 1000,
-          background: scrolled ? "rgba(255, 255, 255, 0.98)" : "rgba(255, 255, 255, 0.95)",
+          background: scrolled ? "rgba(255,255,255,0.98)" : "rgba(255,255,255,0.95)",
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           borderBottom: "1px solid #e2e8f0",
-          boxShadow: scrolled ? "0 4px 24px rgba(0, 0, 0, 0.06)" : "0 2px 10px rgba(0, 0, 0, 0.02)",
-          transition: "all 0.35s ease",
+          boxShadow: scrolled ? "0 4px 24px rgba(0,0,0,0.06)" : "none",
+          transition: "all 0.3s ease",
         }}
       >
-        {/* Top Announcement Bar */}
+        {/* ── Top Announcement Bar ── */}
         <div
           style={{
-            background: "linear-gradient(90deg, #0E4D92 0%, #1d69ba 100%)",
-            color: "#ffffff",
-            padding: "5px 12px",
+            background: "linear-gradient(90deg, #0E4D92, #1d69ba)",
+            color: "#fff",
+            padding: "5px 16px",
             fontSize: "11px",
             textAlign: "center",
             fontWeight: "600",
-            letterSpacing: "0.2px",
-            whiteSpace: "nowrap",
             overflow: "hidden",
+            whiteSpace: "nowrap",
             textOverflow: "ellipsis",
           }}
         >
-          🎓 Admissions Open 2026: Spoken English & IELTS Batches!{" "}
-          <Link href="/courses" style={{ color: "#ffd166", textDecoration: "underline", marginLeft: "6px", fontWeight: "800" }} className="hidden sm:inline">
-            Explore Courses & Register Free →
-          </Link>
+          🎓 Admissions Open 2026: Spoken English & IELTS Batches!
         </div>
 
+        {/* ── Main Nav Bar ── */}
         <nav
           style={{
             maxWidth: "1400px",
             margin: "0 auto",
             padding: "0 12px",
-            height: "64px",
+            height: "56px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "8px",
           }}
         >
-          {/* LEFT: Menu Trigger + Logo on Mobile */}
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Toggle Menu"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                background: mobileOpen ? "rgba(14, 77, 146, 0.08)" : "#f8fafc",
-                border: "1px solid #cbd5e1",
-                padding: "7px 11px",
-                borderRadius: "8px",
-                cursor: "pointer",
-                color: "#0f172a",
-                fontSize: "11px",
-                fontWeight: "800",
-                letterSpacing: "1px",
-                textTransform: "uppercase",
-                transition: "all 0.2s ease",
-                flexShrink: 0,
-              }}
-            >
-              <svg width="18" height="12" viewBox="0 0 20 12" fill="none" stroke="#0E4D92" strokeWidth="2.2" strokeLinecap="round">
+          {/* LEFT: Hamburger only */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle Menu"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: mobileOpen ? "rgba(14,77,146,0.06)" : "transparent",
+              border: "1px solid #dde3ea",
+              padding: "6px 10px",
+              borderRadius: "8px",
+              cursor: "pointer",
+              color: "#0f172a",
+              fontSize: "11px",
+              fontWeight: "800",
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+              flexShrink: 0,
+            }}
+          >
+            {mobileOpen ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0E4D92" strokeWidth="2" strokeLinecap="round">
+                <line x1="2" y1="2" x2="14" y2="14" />
+                <line x1="14" y1="2" x2="2" y2="14" />
+              </svg>
+            ) : (
+              <svg width="18" height="12" viewBox="0 0 20 12" fill="none" stroke="#0E4D92" strokeWidth="2" strokeLinecap="round">
                 <line x1="0" y1="1" x2="20" y2="1" />
-                <line x1="0" y1="6" x2="20" y2="6" />
+                <line x1="0" y1="6" x2="14" y2="6" />
                 <line x1="0" y1="11" x2="20" y2="11" />
               </svg>
-              <span>{mobileOpen ? "CLOSE" : "MENU"}</span>
-            </button>
+            )}
+            <span className="hidden sm:inline">{mobileOpen ? "CLOSE" : "MENU"}</span>
+          </button>
 
-            {/* Mobile Logo (next to Menu button, zero overlap!) */}
-            <Link
-              href="/"
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-              className="flex md:hidden"
-            >
-              <div
-                style={{
-                  background: "#0E4D92",
-                  color: "#ffffff",
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: "900",
-                  fontSize: "14px",
-                  boxShadow: "0 2px 8px rgba(14, 77, 146, 0.25)",
-                  flexShrink: 0,
-                }}
-              >
-                N
-              </div>
-              <span style={{ fontFamily: "Outfit, sans-serif", fontSize: "17px", fontWeight: "900", color: "#0E4D92", letterSpacing: "1.5px" }}>
-                NESA
-              </span>
-            </Link>
-          </div>
-
-          {/* CENTER: Centered Logo for Desktop (hidden on mobile, visible md+) */}
+          {/* CENTER: Logo — always centered */}
           <Link
             href="/"
             style={{
@@ -159,124 +125,101 @@ export default function Navbar() {
               left: "50%",
               transform: "translateX(-50%)",
               textDecoration: "none",
+              display: "flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "7px",
             }}
-            className="hidden md:flex"
           >
             <div
               style={{
                 background: "#0E4D92",
-                color: "#ffffff",
-                width: "36px",
-                height: "36px",
-                borderRadius: "10px",
+                color: "#fff",
+                width: "32px",
+                height: "32px",
+                borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontWeight: "900",
-                fontSize: "16px",
-                boxShadow: "0 4px 12px rgba(14, 77, 146, 0.25)",
+                fontSize: "15px",
+                boxShadow: "0 2px 8px rgba(14,77,146,0.3)",
                 flexShrink: 0,
               }}
             >
               N
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontFamily: "Outfit, sans-serif", fontSize: "20px", fontWeight: "900", color: "#0E4D92", letterSpacing: "2px", lineHeight: 1 }}>
-                NESA
-              </div>
-              <div style={{ fontSize: "9px", fontWeight: "700", color: "#64748b", letterSpacing: "1.5px", textTransform: "uppercase", marginTop: "1px" }}>
-                Let's Speak in English
-              </div>
+            <div style={{ fontFamily: "Outfit, sans-serif", fontSize: "18px", fontWeight: "900", color: "#0E4D92", letterSpacing: "2px", lineHeight: 1 }}>
+              NESA
             </div>
           </Link>
 
-          {/* RIGHT: Actions (Search, Sign In / Admin Login, Enroll CTA) */}
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            {/* Search Trigger */}
+          {/* RIGHT: Search icon + Sign In (icon only on mobile) */}
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
               style={{
                 background: "#f1f5f9",
-                border: "1px solid #cbd5e1",
+                border: "1px solid #dde3ea",
                 borderRadius: "8px",
-                padding: "7px 10px",
+                width: "36px",
+                height: "36px",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                gap: "4px",
-                color: "#334155",
-                fontSize: "12px",
-                fontWeight: "700",
+                justifyContent: "center",
+                fontSize: "16px",
+                flexShrink: 0,
               }}
             >
-              <span>🔍</span>
-              <span className="hidden sm:inline">Search</span>
+              🔍
             </button>
 
-            {/* FIXED SIGN IN / ADMIN BUTTON */}
             <Link
               href="/admin/login"
+              aria-label="Sign In"
               style={{
-                background: "#ffffff",
-                color: "#0E4D92",
-                border: "1.5px solid #0E4D92",
-                padding: "6px 12px",
+                background: "#f1f5f9",
+                border: "1px solid #dde3ea",
                 borderRadius: "8px",
-                fontSize: "11px",
-                fontWeight: "800",
-                textDecoration: "none",
-                display: "inline-flex",
+                width: "36px",
+                height: "36px",
+                display: "flex",
                 alignItems: "center",
-                gap: "4px",
-                letterSpacing: "0.5px",
-                textTransform: "uppercase",
-                whiteSpace: "nowrap",
+                justifyContent: "center",
+                textDecoration: "none",
+                fontSize: "16px",
+                flexShrink: 0,
               }}
             >
-              <span>🔑</span>
-              <span>Sign In</span>
-            </Link>
-
-            {/* Enroll CTA */}
-            <Link
-              href="/register"
-              className="btn-primary"
-              style={{ padding: "7px 14px", fontSize: "11px", borderRadius: "8px", textTransform: "uppercase" }}
-            >
-              Enroll
+              👤
             </Link>
           </div>
         </nav>
       </header>
 
-      {/* SEARCH MODAL OVERLAY */}
+      {/* ── SEARCH MODAL ── */}
       {searchOpen && (
         <div
           style={{
             position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(15, 23, 42, 0.6)",
+            inset: 0,
+            background: "rgba(15,23,42,0.55)",
             backdropFilter: "blur(8px)",
             zIndex: 2000,
             display: "flex",
             justifyContent: "center",
-            padding: "80px 16px 16px",
+            padding: "70px 16px 16px",
           }}
           onClick={() => setSearchOpen(false)}
         >
           <div
             style={{
-              background: "#ffffff",
+              background: "#fff",
               borderRadius: "16px",
-              maxWidth: "560px",
+              maxWidth: "520px",
               width: "100%",
-              maxHeight: "480px",
+              maxHeight: "460px",
               padding: "20px",
               boxShadow: "0 20px 50px rgba(0,0,0,0.2)",
               display: "flex",
@@ -286,53 +229,35 @@ export default function Navbar() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h3 style={{ fontSize: "16px", fontWeight: "900", color: "#0f172a" }}>Search NESA Courses</h3>
-              <button onClick={() => setSearchOpen(false)} style={{ background: "none", border: "none", fontSize: "18px", cursor: "pointer", color: "#64748b" }}>✕</button>
+              <h3 style={{ fontSize: "16px", fontWeight: "900", color: "#0f172a" }}>Search Courses</h3>
+              <button onClick={() => setSearchOpen(false)} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "#64748b" }}>✕</button>
             </div>
-
             <input
               type="text"
               autoFocus
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Type course name (e.g. Fluent English, IELTS)..."
-              style={{
-                width: "100%",
-                padding: "12px 16px",
-                border: "2px solid #0E4D92",
-                borderRadius: "10px",
-                fontSize: "14px",
-                outline: "none",
-              }}
+              placeholder="Type course name (e.g. IELTS, Fluent English)..."
+              style={{ width: "100%", padding: "12px 16px", border: "2px solid #0E4D92", borderRadius: "10px", fontSize: "14px", outline: "none" }}
             />
-
             <div style={{ overflowY: "auto", flex: 1, display: "flex", flexDirection: "column", gap: "8px" }}>
               {searchQuery.trim() === "" ? (
                 <p style={{ fontSize: "13px", color: "#94a3b8", textAlign: "center", padding: "16px" }}>Start typing to search courses...</p>
               ) : filteredSearchCourses.length === 0 ? (
-                <p style={{ fontSize: "13px", color: "#ef4444", textAlign: "center", padding: "16px" }}>No courses found matching "{searchQuery}"</p>
+                <p style={{ fontSize: "13px", color: "#ef4444", textAlign: "center", padding: "16px" }}>No courses found matching &quot;{searchQuery}&quot;</p>
               ) : (
                 filteredSearchCourses.map((c) => (
                   <Link
                     key={c.slug}
                     href={`/courses/${c.slug}`}
                     onClick={() => setSearchOpen(false)}
-                    style={{
-                      padding: "10px 14px",
-                      borderRadius: "8px",
-                      background: "#f8fafc",
-                      textDecoration: "none",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      border: "1px solid #e2e8f0",
-                    }}
+                    style={{ padding: "10px 14px", borderRadius: "8px", background: "#f8fafc", textDecoration: "none", display: "flex", justifyContent: "space-between", alignItems: "center", border: "1px solid #e2e8f0" }}
                   >
                     <div>
                       <div style={{ fontSize: "13px", fontWeight: "800", color: "#0f172a" }}>{c.name}</div>
                       <div style={{ fontSize: "11px", color: "#64748b" }}>{c.desc}</div>
                     </div>
-                    <div style={{ fontSize: "12px", fontWeight: "900", color: "#0E4D92" }}>{c.price}</div>
+                    <div style={{ fontSize: "12px", fontWeight: "900", color: "#0E4D92", flexShrink: 0, marginLeft: "8px" }}>{c.price}</div>
                   </Link>
                 ))
               )}
@@ -341,32 +266,30 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* FULL-SCREEN SIDE MENU OVERLAY */}
+      {/* ── SIDE DRAWER MENU ── */}
       {mobileOpen && (
         <div
           style={{
             position: "fixed",
-            top: "92px",
+            top: "84px",
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(15, 23, 42, 0.4)",
-            backdropFilter: "blur(6px)",
+            background: "rgba(15,23,42,0.35)",
+            backdropFilter: "blur(4px)",
             zIndex: 999,
-            display: "flex",
-            justifyContent: "flex-start",
           }}
           onClick={() => setMobileOpen(false)}
         >
           <div
             style={{
-              width: "100%",
-              maxWidth: "340px",
+              width: "85%",
+              maxWidth: "320px",
               height: "100%",
-              background: "#ffffff",
+              background: "#fff",
               borderRight: "1px solid #e2e8f0",
-              boxShadow: "10px 0 40px rgba(0,0,0,0.15)",
-              padding: "20px",
+              boxShadow: "8px 0 30px rgba(0,0,0,0.12)",
+              padding: "20px 16px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -374,18 +297,16 @@ export default function Navbar() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <div style={{ fontSize: "11px", fontWeight: "800", color: "#0E4D92", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "10px" }}>
-                NAVIGATION MENU
-              </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <div style={{ fontSize: "10px", fontWeight: "800", color: "#0E4D92", letterSpacing: "2px", marginBottom: "8px" }}>NAVIGATE</div>
 
               {[
-                { label: "🏠 Home", href: "/" },
-                { label: "📚 All Courses", href: "/courses" },
-                { label: "ℹ️ About NESA", href: "/about" },
-                { label: "⭐ Why Choose NESA", href: "/why-nesa" },
-                { label: "💬 Student Reviews", href: "/testimonials" },
-                { label: "📞 Contact Admissions", href: "/contact" },
+                { label: "Home", href: "/", icon: "🏠" },
+                { label: "All Courses", href: "/courses", icon: "📚" },
+                { label: "About NESA", href: "/about", icon: "ℹ️" },
+                { label: "Why Choose NESA", href: "/why-nesa", icon: "⭐" },
+                { label: "Student Reviews", href: "/testimonials", icon: "💬" },
+                { label: "Contact Admissions", href: "/contact", icon: "📞" },
               ].map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -399,47 +320,39 @@ export default function Navbar() {
                       fontSize: "14px",
                       fontWeight: isActive ? "800" : "600",
                       color: isActive ? "#0E4D92" : "#0f172a",
-                      background: isActive ? "#f0fcff" : "#ffffff",
-                      border: isActive ? "1px solid #cceeff" : "1px solid #f1f5f9",
+                      background: isActive ? "#f0fcff" : "transparent",
+                      border: isActive ? "1px solid #cceeff" : "1px solid transparent",
                       textDecoration: "none",
                       display: "flex",
-                      justifyContent: "space-between",
                       alignItems: "center",
+                      gap: "10px",
                     }}
                   >
-                    <span>{item.label}</span>
-                    <span style={{ fontSize: "12px", color: "#64748b" }}>→</span>
+                    <span>{item.icon}</span>
+                    <span style={{ flex: 1 }}>{item.label}</span>
+                    <span style={{ fontSize: "11px", color: "#94a3b8" }}>›</span>
                   </Link>
                 );
               })}
 
-              <hr style={{ margin: "14px 0", borderColor: "#f1f5f9" }} />
+              <hr style={{ margin: "12px 0", borderColor: "#f1f5f9" }} />
 
-              <div style={{ fontSize: "11px", fontWeight: "800", color: "#0E4D92", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "6px" }}>
-                POPULAR COURSES
-              </div>
+              <div style={{ fontSize: "10px", fontWeight: "800", color: "#0E4D92", letterSpacing: "2px", marginBottom: "6px" }}>POPULAR COURSES</div>
               {courses.slice(0, 4).map((c) => (
                 <Link
                   key={c.slug}
                   href={`/courses/${c.slug}`}
                   onClick={() => setMobileOpen(false)}
-                  style={{
-                    padding: "8px 10px",
-                    fontSize: "12px",
-                    color: "#334155",
-                    textDecoration: "none",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
+                  style={{ padding: "6px 10px", fontSize: "12px", color: "#334155", textDecoration: "none", display: "flex", justifyContent: "space-between" }}
                 >
                   <span>• {c.name}</span>
-                  <span style={{ fontWeight: "800", color: "#0E4D92" }}>{c.price}</span>
+                  <span style={{ fontWeight: "800", color: "#0E4D92", fontSize: "11px" }}>{c.price}</span>
                 </Link>
               ))}
             </div>
 
-            {/* Bottom Actions */}
-            <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
+            {/* Bottom CTAs inside drawer */}
+            <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "8px" }}>
               <Link
                 href="/admin/login"
                 onClick={() => setMobileOpen(false)}
@@ -452,9 +365,9 @@ export default function Navbar() {
                 href="/register"
                 onClick={() => setMobileOpen(false)}
                 className="btn-primary"
-                style={{ width: "100%", justifyContent: "center", padding: "12px", fontSize: "13px" }}
+                style={{ width: "100%", justifyContent: "center", padding: "13px", fontSize: "13px" }}
               >
-                Enroll Free 🚀
+                Enroll Free Now 🚀
               </Link>
             </div>
           </div>
