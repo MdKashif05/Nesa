@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main style={{ background: "#ffffff", paddingTop: "100px" }}>
+      <main style={{ background: "#ffffff", paddingTop: "90px" }}>
         
         {/* ─── 1. HERO SECTION ─── */}
         <section
